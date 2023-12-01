@@ -71,7 +71,7 @@ fn process(input: []const u8, part: Part) u64 {
     return result;
 }
 
-pub fn solve() !void {
+pub fn main() !void {
     const input = @embedFile("input.txt");
     std.debug.print("==== DAY 1 ====\n", .{});
     const part_1 = process(input, Part.one);
