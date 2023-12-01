@@ -3,8 +3,6 @@ const parseInt = std.fmt.parseInt;
 const Part = @import("utils").Part;
 const expect = std.testing.expect;
 
-const String = []const u8;
-
 const RepMap = struct {
     letters: []const u8,
     digit: u8,
