@@ -5,9 +5,6 @@ const expect = std.testing.expect;
 
 const String = []const u8;
 
-var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-const allocator = gpa.allocator();
-
 const RepMap = struct {
     letters: []const u8,
     digit: u8,
