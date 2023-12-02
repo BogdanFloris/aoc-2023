@@ -38,6 +38,30 @@ fn isGamePossible(game: []const u8) !bool {
     return true;
 }
 
+fn getMaxColorPowerSet(game: []const u8) !u64 {
+    const trimmed_game = std.mem.trim(u8, game, " ");
+    var cubes = std.mem.splitAny(u8, trimmed_game, ";,");
+    var max_r: u64 = 0;
+    var max_g: u64 = 0;
+    var max_b: u64 = 0;
+    while (cubes.next()) |cube| {
+        const trimmed_cube = std.mem.trim(u8, cube, " ");
+        var cube_split = std.mem.splitSequence(u8, trimmed_cube, " ");
+        const cube_number = try parseInt(u32, cube_split.next() orelse unreachable, 10);
+        const cube_color = cube_split.next() orelse unreachable;
+        if (std.mem.eql(u8, cube_color, "red") and cube_number > max_r) {
+            max_r = cube_number;
+        }
+        if (std.mem.eql(u8, cube_color, "green") and cube_number > max_g) {
+            max_g = cube_number;
+        }
+        if (std.mem.eql(u8, cube_color, "blue") and cube_number > max_b) {
+            max_b = cube_number;
+        }
+    }
+    return max_r * max_g * max_b;
+}
+
 fn process(input: []const u8, part: Part) !u64 {
     const trimmed = std.mem.trim(u8, input, "\n");
     var lines = std.mem.splitSequence(u8, trimmed, "\n");
@@ -54,6 +78,10 @@ fn process(input: []const u8, part: Part) !u64 {
         if (part == Part.one and try isGamePossible(game)) {
             result += game_id_num;
         }
+        if (part == Part.two) {
+            const power_set = try getMaxColorPowerSet(game);
+            result += power_set;
+        }
     }
     return result;
 }
@@ -63,10 +91,12 @@ pub fn main() !void {
     std.debug.print("==== DAY 1 ====\n", .{});
     const part_1 = try process(input, Part.one);
     std.debug.print("Part 1: {d}\n", .{part_1});
+    const part_2 = try process(input, Part.two);
+    std.debug.print("Part 22 {d}\n", .{part_2});
 }
 
 ////// TESTS //////
-const test_input_1 =
+const test_input =
     \\Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
     \\Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
     \\Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
@@ -75,6 +105,11 @@ const test_input_1 =
 ;
 
 test "part 1" {
-    const result = try process(test_input_1, Part.one);
+    const result = try process(test_input, Part.one);
     try expect(result == 8);
+}
+
+test "part 2" {
+    const result = try process(test_input, Part.two);
+    try expect(result == 2286);
 }
