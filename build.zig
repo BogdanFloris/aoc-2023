@@ -14,9 +14,7 @@ pub fn build(b: *std.Build) void {
 
     // Set up an exe for each day
     var day: u32 = 1;
-    // TODO: update this to the correct number of days
-    const max_day: u32 = 2;
-    while (day <= max_day) : (day += 1) {
+    while (day <= 25) : (day += 1) {
         const dayString = b.fmt("day{:0>2}", .{day});
         const zigFile = b.fmt("src/{s}/{s}.zig", .{ dayString, dayString });
 
