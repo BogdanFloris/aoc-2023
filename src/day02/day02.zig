@@ -88,11 +88,11 @@ fn process(input: []const u8, part: Part) !u64 {
 
 pub fn main() !void {
     const input = @embedFile("input.txt");
-    std.debug.print("==== DAY 1 ====\n", .{});
+    std.debug.print("==== DAY 2 ====\n", .{});
     const part_1 = try process(input, Part.one);
     std.debug.print("Part 1: {d}\n", .{part_1});
     const part_2 = try process(input, Part.two);
-    std.debug.print("Part 22 {d}\n", .{part_2});
+    std.debug.print("Part 2: {d}\n", .{part_2});
 }
 
 ////// TESTS //////
