@@ -34,8 +34,6 @@ fn process(input: []const u8, part: utils.Part) !u64 {
     const trimmed = std.mem.trim(u8, input, "\n");
     var lines = std.mem.splitSequence(u8, trimmed, "\n");
     var game_counter = std.AutoHashMap(usize, u64).init(allocator);
-    // HACK: to fix the TODO below
-    try game_counter.ensureTotalCapacity(10000);
     defer game_counter.deinit();
     var result: u64 = 0;
     var game: usize = 1;
@@ -49,9 +47,14 @@ fn process(input: []const u8, part: utils.Part) !u64 {
             result += std.math.pow(u64, 2, matches - 1);
         }
         if (part == utils.Part.two) {
-            const game_count = try game_counter.getOrPutValue(game, 1);
+            _ = try game_counter.getOrPutValue(game, 1);
             for (game + 1..game + 1 + matches) |g| {
-                // TODO: when getOrPut makes another allocation it invalidates the `game_counter` pointer and we get a seg fault
+                // HACK: we lookup the game again here because if creating g_count allocates new memory,
+                // the `game_count` pointer is pointing to some other memory, and so we get a seg fault.
+                // The map should invalidate the pointer.
+                // Another solution would be to ensure the capacity of the map, but we cannot know how many games
+                // there are in the input, so it would be wasteful to do that.
+                const game_count = try game_counter.getOrPutValue(game, 1);
                 const g_count = try game_counter.getOrPutValue(g, 1);
                 g_count.value_ptr.* += game_count.value_ptr.*;
             }
