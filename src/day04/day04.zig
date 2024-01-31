@@ -74,7 +74,7 @@ fn process(input: []const u8, part: utils.Part) !u64 {
 
 pub fn main() !void {
     const input = @embedFile("input.txt");
-    std.debug.print("==== DAY 3 ====\n", .{});
+    std.debug.print("==== DAY 4 ====\n", .{});
     const part_1 = try process(input, utils.Part.one);
     std.debug.print("Part 1: {d}\n", .{part_1});
     const part_2 = try process(input, utils.Part.two);
